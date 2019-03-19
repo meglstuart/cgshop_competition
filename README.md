@@ -1,0 +1,1 @@
+# cgshop_competition
