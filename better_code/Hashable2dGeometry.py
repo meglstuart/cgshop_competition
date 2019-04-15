@@ -1,5 +1,5 @@
 # Intersection test taken from https://www.geeksforgeeks.org/check-if-two-given-line-segments-intersect/
-
+from __future__ import division
 def Orientation(p, q, r):
     """
     Finds the orientation of ordered triplet (p,q,r)
@@ -10,7 +10,7 @@ def Orientation(p, q, r):
     """
     val = (q.y - p.y) * (r.x - q.x) - (q.x - p.x) * (r.y - q.y)
 
-    if val == 0: return 0
+    if abs(val) < 0.00001: return 0
     elif val > 0: return 1
     else: return 2
 
@@ -51,6 +51,10 @@ class Segment:
         else:
             self.A = B
             self.B = A
+        if (self.A.x - self.B.x) !=0:
+            self.slope = (self.A.y-self.B.y)/(self.A.x-self.B.x)
+        else:
+            self.slope = 1000000000
 
     def __str__(self):
         return "Segment "+str(self.A)+ " -> " + str(self.B)
@@ -64,12 +68,24 @@ class Segment:
     def __ne__(self, other):
         return not __eq__(self,other)
 
+    def __gt__(self, other):
+        if other.slope == 0:
+            return True
+        if (self.slope > 0 and other.slope > 0) or (self.slope < 0 and other.slope < 0):
+            return self.slope < other.slope
+        if self.slope > 0:
+            return True
+        return False
+
+
     def onSegment(self, p):
         """
         Given a point, p, returns True if p lies in the interior of this segment.
         """
-        crossprod = (p.y - self.A.y) * (self.B.x - self.A.x) - (p.x - self.A.x) * (self.B.y - self.A.y)
-        if crossprod != 0: return False
+        eps = 0.00001
+        det = self.A.x*(self.B.y - p.y) + self.B.x*(p.y - self.A.y) + p.x*(self.A.y - self.B.y)
+        if abs(det) > eps:
+            return False
 
         # Otherwise p is collinear with the segment endpoints, so we just check if it's in the right range
         return p.x <= max(self.A.x, self.B.x) and p.x >= min(self.A.x, self.B.x) and p.y <= max(self.A.y, self.B.y) and p.y >= min(self.A.y, self.B.y)
@@ -100,3 +116,24 @@ class Segment:
             return True
 
         return False
+
+    def intersectionPoint(self, other):
+        # Assumes segments are not collinear
+        intersects = False
+        a1 = self.B.y - self.A.y
+        b1 = self.A.x - self.B.x
+        c1 = a1*self.A.x + b1* self.A.y
+
+        a2 = other.B.y - other.A.y
+        b2 = other.A.x - other.B.x
+        c2 = a2*other.A.x + b2* other.A.y
+
+        determinant = a1*b2 - a2*b1
+
+        x = (b2*c1 - b1*c2)/determinant
+        y = (a1*c2 - a2*c1)/determinant
+
+        if (x >= min(self.A.x, self.B.x)) and (x <= max(self.A.x, self.B.x)) and (x >= min(other.A.x, other.B.x)) and (x <= max(other.A.x, other.B.x)) and (y >= min(self.A.y, self.B.y)) and (y <= max(self.A.y, self.B.y)) and (y >= min(other.A.y, other.B.y)) and (y <= max(other.A.y, other.B.y)):
+            intersects = True
+
+        return intersects, Point(x,y)
