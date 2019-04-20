@@ -99,11 +99,13 @@ def handleEventPoint(p,U,T,Q):
     """
     p is the event point, U is the set of segments with upper endpoint U, and T is the status structure blist, Q is the event queue
     """
-    global intCount
+    # global intCount
+    intCount = 0
     # print("before delete")
     # for t in T:
     #     print(t)
     L, C, ind = searchInT(T, p)
+    # print(len(T))
     if len(C) != 0:
         # print(str(p) + " is in the interior of these segments:")
         # for c in C:
@@ -112,6 +114,8 @@ def handleEventPoint(p,U,T,Q):
         # for x in L.union(U):
         #     print(x)
         intCount+=1
+        return 1     #Stop execution after first intersection
+        # print("intersection found")
     toInsert = list(U.union(C))
     toInsert.sort()
     # print("before insert")
@@ -126,15 +130,23 @@ def handleEventPoint(p,U,T,Q):
     #             if Orientation(T[i].A,T[i].B,p) != 1:
     #                 ind = i
     #                 break
+    if ind == -1:
+        ind = len(T)
     for seg in toInsert:
-        T.insert(ind,seg)
+        # if (ind == -1):
+        #     T.append(seg)
+        # else:
+            T.insert(ind,seg)
     # print("after insert")
     # for t in T:
     #     print(t)
+    # print(len(T))
     if len(toInsert) == 0:
-        if(ind-1 >=0):
+        if(ind-1 >=0 and ind < len(T)):
             sl = T[ind-1]
             sr = T[ind]
+            # print("len(toInsert) = 0. checking intersection of "+str(sl)+" and "+str(sr))
+
             findNewEvent(sl,sr,p,Q)
     else:
         if ind-1 >=0:
@@ -147,44 +159,73 @@ def handleEventPoint(p,U,T,Q):
             sr = T[ind+len(toInsert)]
             # print("checking intersection of "+str(s_2prime)+" and "+str(sr))
             findNewEvent(s_2prime,sr,p,Q)
+    return intCount
+# inst = 10
+# instance_file = "/Users/meg/repos/cgshop_competition/challenge_instances/data/images/euro-night-" + str(inst).zfill(7) + ".instance"
+# vertices = readdata(instance_file)
+#
+# Q = dict([(v,set()) for v in vertices])
+# Q = SortedDict(Q.items())
+#
+# T = blist()
+#
+# all_possible_edges = set()
+# for pt in vertices:
+#     for ptB in vertices:
+#         if ptB > pt:
+#             all_possible_edges.add(Segment(pt, ptB))
+#             Q[pt].add(Segment(pt,ptB))
+#
+# # for q,S in Q.items():
+# #     print(q)
+# #     for s in S:
+# #         print(s)
+#
+# # T = blist(all_possible_edges)
+# intCount = 0
+#
+# while len(Q) != 0:
+#     p, U = Q.popitem(0)
+#     # print("handling point "+ str(p))
+#     # for u in U:
+#     #     print(u)
+#     handleEventPoint(p, U, T, Q)
+#     # print(p)
+#     # for s in U:
+#     #     print(s)
+# print(intCount)
 
-inst = 1000
-instance_file = "/Users/meg/repos/cgshop_competition/challenge_instances/data/images/euro-night-" + str(inst).zfill(7) + ".instance"
-vertices = readdata(instance_file)
+# intCount = 0
 
-Q = dict([(v,set()) for v in vertices])
-Q = SortedDict(Q.items())
+def findIntersections(Q):
+    # Q = dict([(points[p],set()) for p in path])
+    # Q = SortedDict(Q.items())
+    #
+    # for i in range(len(path)-1):
+    #     if points[path[i+1]] > points[path[i]]:
+    #         Q[points[path[i]]].add(Segment(points[path[i]],points[path[i+1]]))
+    #     else:
+    #         Q[points[path[i+1]]].add(Segment(points[path[i]],points[path[i+1]]))
+    #
+    # if points[path[-1]] > points[path[0]]:
+    #     Q[points[path[0]]].add(Segment(points[path[0]],points[path[-1]]))
+    # else:
+    #     Q[points[path[-1]]].add(Segment(points[path[0]],points[path[-1]]))
 
-T = blist()
-
-all_possible_edges = set()
-for pt in vertices:
-    for ptB in vertices:
-        if ptB > pt:
-            all_possible_edges.add(Segment(pt, ptB))
-            Q[pt].add(Segment(pt,ptB))
-
-# for q,S in Q.items():
-#     print(q)
-#     for s in S:
-#         print(s)
-
-# T = blist(all_possible_edges)
-intCount = 0
-
-while len(Q) != 0:
-    p, U = Q.popitem(0)
-    # print("handling point "+ str(p))
-    # for u in U:
-    #     print(u)
-    handleEventPoint(p, U, T, Q)
-    # print(p)
-    # for s in U:
-    #     print(s)
-print(intCount)
-
-
-
+    T = blist()
+    # for q,S in Q.items():
+    #     print(q)
+    #     for s in S:
+    #         print(s)
+    # global intCount
+    # print(len(T))
+    intCount = 0
+    while len(Q) != 0:
+        p, U = Q.popitem(0)
+        intCount = handleEventPoint(p, U, T, Q)
+        if intCount != 0:
+            return intCount
+    return intCount
 # lines = [[(e.A.x,e.A.y), (e.B.x, e.B.y)] for e in all_possible_edges]
 # # print(lines)
 # lc = mc.LineCollection(lines, linewidths=2)

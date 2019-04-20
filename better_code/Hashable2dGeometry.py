@@ -129,7 +129,8 @@ class Segment:
         c2 = a2*other.A.x + b2* other.A.y
 
         determinant = a1*b2 - a2*b1
-
+        if determinant == 0:
+            return False, Point(0,0)
         x = (b2*c1 - b1*c2)/determinant
         y = (a1*c2 - a2*c1)/determinant
 
