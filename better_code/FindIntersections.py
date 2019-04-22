@@ -114,7 +114,7 @@ def handleEventPoint(p,U,T,Q):
         # for x in L.union(U):
         #     print(x)
         intCount+=1
-        return 1     #Stop execution after first intersection
+        # return 1     #Stop execution after first intersection
         # print("intersection found")
     toInsert = list(U.union(C))
     toInsert.sort()
@@ -160,40 +160,40 @@ def handleEventPoint(p,U,T,Q):
             # print("checking intersection of "+str(s_2prime)+" and "+str(sr))
             findNewEvent(s_2prime,sr,p,Q)
     return intCount
-# inst = 10
-# instance_file = "/Users/meg/repos/cgshop_competition/challenge_instances/data/images/euro-night-" + str(inst).zfill(7) + ".instance"
-# vertices = readdata(instance_file)
-#
-# Q = dict([(v,set()) for v in vertices])
-# Q = SortedDict(Q.items())
-#
-# T = blist()
-#
-# all_possible_edges = set()
-# for pt in vertices:
-#     for ptB in vertices:
-#         if ptB > pt:
-#             all_possible_edges.add(Segment(pt, ptB))
-#             Q[pt].add(Segment(pt,ptB))
-#
-# # for q,S in Q.items():
-# #     print(q)
-# #     for s in S:
-# #         print(s)
-#
-# # T = blist(all_possible_edges)
-# intCount = 0
-#
-# while len(Q) != 0:
-#     p, U = Q.popitem(0)
-#     # print("handling point "+ str(p))
-#     # for u in U:
-#     #     print(u)
-#     handleEventPoint(p, U, T, Q)
-#     # print(p)
-#     # for s in U:
-#     #     print(s)
-# print(intCount)
+inst = 10
+instance_file = "/Users/meg/repos/cgshop_competition/challenge_instances/data/images/euro-night-" + str(inst).zfill(7) + ".instance"
+vertices = readdata(instance_file)
+
+Q = dict([(v,set()) for v in vertices])
+Q = SortedDict(Q.items())
+
+T = blist()
+
+all_possible_edges = set()
+for pt in vertices:
+    for ptB in vertices:
+        if ptB > pt:
+            all_possible_edges.add(Segment(pt, ptB))
+            Q[pt].add(Segment(pt,ptB))
+
+# for q,S in Q.items():
+#     print(q)
+#     for s in S:
+#         print(s)
+
+# T = blist(all_possible_edges)
+intCount = 0
+
+while len(Q) != 0:
+    p, U = Q.popitem(0)
+    # print("handling point "+ str(p))
+    # for u in U:
+    #     print(u)
+    intCount += handleEventPoint(p, U, T, Q)
+    # print(p)
+    # for s in U:
+    #     print(s)
+print(intCount)
 
 # intCount = 0
 
