@@ -2,4 +2,4 @@
 
 https://cgshop.ibr.cs.tu-bs.de/
 
-Under active development
+This code is a hot mess
