@@ -74,26 +74,26 @@ for inst in [10]:
             if in_complex[i] == 0:
                 for j in range(len(current_boundary)):
                     test_boundary.insert(j, i)
-                    
-                    # legal = 0
-                    # line_A = vertices[test_boundary[j-1],:]
-                    # line_B = vertices[test_boundary[j],:]
-                    # line_C = vertices[test_boundary[j+1],:]
-                    # for k in range(len(test_boundary)-1):
-                    #     test_A = vertices[test_boundary[k],:]
-                    #     test_B = vertices[test_boundary[k+1],:]
-                    #     if k == j-2:
-                    #         if (intersect(line_B, line_C, test_A, test_B)):
-                    #             legal = 1
-                    #             break
-                    #     elif k == j+1:
-                    #         if (intersect(line_A, line_B, test_A, test_B)):
-                    #             legal = 1
-                    #             break
-                    #     elif k!=j-1 and k!=j:
-                    #         if (intersect(line_A, line_B, test_A, test_B) or intersect(line_B, line_C, test_A, test_B)):
-                    #             legal = 1
-                    #             break
+
+                    legal = 0
+                    line_A = vertices[test_boundary[j-1],:]
+                    line_B = vertices[test_boundary[j],:]
+                    line_C = vertices[test_boundary[j+1],:]
+                    for k in range(len(test_boundary)-1):
+                        test_A = vertices[test_boundary[k],:]
+                        test_B = vertices[test_boundary[k+1],:]
+                        if k == j-2:
+                            if (intersect(line_B, line_C, test_A, test_B)):
+                                legal = 1
+                                break
+                        elif k == j+1:
+                            if (intersect(line_A, line_B, test_A, test_B)):
+                                legal = 1
+                                break
+                        elif k!=j-1 and k!=j:
+                            if (intersect(line_A, line_B, test_A, test_B) or intersect(line_B, line_C, test_A, test_B)):
+                                legal = 1
+                                break
                     if legal == 0:
                         curr_area = area(vertices,test_boundary)
                         if curr_area < max_area:

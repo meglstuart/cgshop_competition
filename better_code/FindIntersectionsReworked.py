@@ -112,6 +112,8 @@ def handleEventPoint(p,U,T,Q):
         for x in L.union(U):
             print(x)
         intCount+=1
+
+        return (C,L.union(U))
         # return 1     #Stop execution after first intersection
         # print("intersection found")
     toInsert = list(U.union(C))
@@ -157,7 +159,7 @@ def handleEventPoint(p,U,T,Q):
             sr = T[ind+len(toInsert)]
             # print("checking intersection of "+str(s_2prime)+" and "+str(sr))
             findNewEvent(s_2prime,sr,p,Q)
-    return intCount
+    # return intCount
 # inst = 10
 # instance_file = "/Users/meg/repos/cgshop_competition/challenge_instances/data/images/euro-night-" + str(inst).zfill(7) + ".instance"
 # vertices = readdata(instance_file)
@@ -220,10 +222,10 @@ def findIntersections(Q):
     intCount = 0
     while len(Q) != 0:
         p, U = Q.popitem(0)
-        intCount = handleEventPoint(p, U, T, Q)
-        if intCount != 0:
-            return intCount
-    return intCount
+        return handleEventPoint(p, U, T, Q)
+        # if intCount != 0:
+        #     return intCount
+    # return intCount
 # lines = [[(e.A.x,e.A.y), (e.B.x, e.B.y)] for e in all_possible_edges]
 # # print(lines)
 # lc = mc.LineCollection(lines, linewidths=2)
